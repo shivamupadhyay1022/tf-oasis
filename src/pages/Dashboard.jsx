@@ -152,7 +152,7 @@ function Dashboard() {
             trend={{ value: 12, isPositive: true }}
           />
           <StatsCard
-            title="Average Grade"
+            title="Total Tutors"
             value="B+"
             icon={
               <svg

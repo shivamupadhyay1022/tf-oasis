@@ -3,6 +3,7 @@ import { ref, get, remove } from "firebase/database";
 import { deleteUser } from "firebase/auth";
 import { db, auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import TutorCard from "../components/TutorCard";
 
 export default function Tutors() {
   const [tutors, setTutors] = useState([]);
@@ -50,94 +51,14 @@ export default function Tutors() {
 
       <h1 className="text-3xl font-bold p-8">Manage Tutors</h1>
 
-      <div className="grid p-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {tutors.map((tutor) => (
-          <div
-            key={tutor.id}
-            className="bg-white rounded-lg shadow-md p-6 relative"
-          >
-            {/* Edit & Delete Buttons */}
-            <div className="absolute top-2 right-2 flex gap-2">
-              <button onClick={() => navigate(`/tutors/${tutor.id}`)} className="text-blue-500 hover:text-blue-700">✏️</button>
-              <button
-                onClick={() => handleDelete(tutor.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                🗑️
-              </button>
-            </div>
-
-            {/* Tutor Info */}
-            <img
-              src={tutor.profilepic || "/default-avatar.png"}
-              alt="Profile"
-              className="w-20 h-20 mx-auto rounded-full mb-4"
-            />
-            <h3 className="text-lg font-semibold ">{tutor.name}</h3>
-            <p className="text-sm text-gray-500 ">{tutor.email}</p>
-
-            <p className="text-sm text-gray-500 ">Language: </p>
-            <div className="flex flex-wrap gap-2">
-              {tutor?.lang?.map((language) => (
-                <span
-                  key={language}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-                >
-                  {language}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 ">Location: </p>
-            <div className="flex flex-wrap gap-2">
-              {tutor.locations?.map((location) => (
-                <span
-                  key={location}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-                >
-                  {location}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 ">Subjects: </p>
-            <div className="flex flex-wrap gap-2">
-              {tutor?.sub?.map((subject) => (
-                <span
-                  key={subject}
-                  className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm"
-                >
-                  {subject}
-                </span>
-              ))}
-            </div>
-            <p className="text-sm text-gray-500 ">
-              Stars: ⭐{tutor.stars}
-            </p>
-            <p className="text-sm text-gray-500 ">
-              CPH: ₹{tutor.cph}/hr
-            </p>
-            <p className="text-sm text-gray-500 ">Schedule: </p>
-            {tutor.schedule && tutor.schedule.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
-                {tutor.schedule.map((entry, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between gap-2 items-center p-2 rounded-md bg-gray-100"
-                  >
-                    <span className="text-sm text-gray-700">{entry.day}</span>
-                    <span className="text-sm text-gray-600">
-                      {entry.start} - {entry.end}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">Schedule not available.</p>
-            )}
-            <p className="text-sm text-gray-500 ">
-              Online: {tutor.teachOnline ? "✅ Yes" : "❌ No"}
-            </p>
-          </div>
-        ))}
+      <div className="grid p-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-3">
+      {tutors.length > 0 ? (
+          tutors.map((student) => (
+            <TutorCard key={student.id} details={student} />
+          ))
+        ) : (
+          <p>Loading students...</p>
+        )}
       </div>
     </div>
   );

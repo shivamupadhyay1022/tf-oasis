@@ -21,6 +21,7 @@ const StudentProfile = () => {
     bio: "",
   });
   const [activeTab, setActiveTab] = useState("Overview");
+  const [key, setKey] = useState(0)
 
 
   // Fetch User Data from Firebase
@@ -35,7 +36,7 @@ const StudentProfile = () => {
     };
 
     fetchUserData();
-  }, [id]);
+  }, [id,key]);
 
   // Handle Input Changes
   const handleChange = (e) => {
@@ -76,7 +77,7 @@ const StudentProfile = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-semibold">{userData.name}</h1>
-          <p className="text-gray-500">userData Profile</p>
+          <p className="text-gray-500">Student Profile: {id}</p>
         </div>
       </div>
 
@@ -107,7 +108,7 @@ const StudentProfile = () => {
           student={userData}
         />
       )}
-      {activeTab === "Class Tracking" && <ClassTracking userData={userData} />}
+      {activeTab === "Class Tracking" && <ClassTracking userData={userData} setKeyProp={setKey} />}
       {activeTab === "Test Records" && <TestRecords />}
       {activeTab === "Fee Details" && <FeeDetails />}
       {activeTab === "Attendance" && <Attendance />}

@@ -53,47 +53,7 @@ function Students() {
 
 
   return (
-    // <div className=" bg-gray-100 min-h-screen">
-    //   <h1 className="text-3xl font-bold p-8">Manage Students</h1>
 
-    //   <div className="grid px-8 pb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-    //     {users.map((user) => (
-    //       <div
-    //         key={user.id}
-    //         className="bg-white rounded-lg shadow-md p-6 relative"
-    //         onClick={() => navigate(`/students/${user.id}`)}
-    //       >
-    //         {/* Edit & Delete Buttons */}
-    //         <div className="absolute top-2 right-2 flex gap-2">
-    //           <button className="text-blue-500 hover:text-blue-700">✏️</button>
-    //           <button
-    //             onClick={() => handleDelete(user.id)}
-    //             className="text-red-500 hover:text-red-700"
-    //           >
-    //             🗑️
-    //           </button>
-    //         </div>
-
-    //         {/* User Info */}
-    //         <img
-    //           src={user.profilepic || "/default-avatar.png"}
-    //           alt="Profile"
-    //           className="w-20 h-20 mx-auto rounded-full mb-4"
-    //         />
-    //         <div className="flex flex-col justify-start">
-    //           <h3 className="text-lg font-semibold ">{user.name}</h3>
-    //           <p className="text-sm text-gray-500 ">{user.email}</p>
-    //           <p className="text-sm text-gray-500 ">
-    //             Class: <strong>{user.clas}</strong>
-    //           </p>
-    //           <p className="text-sm text-gray-500 ">
-    //             Exam: <strong>{user.exam}</strong>
-    //           </p>
-    //         </div>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
     <div className="">
     <div className="flex flex-col mx-4 md:mx-16 mt-10">
       <div className="flex flex-row justify-between items-center mb-10">
