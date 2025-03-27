@@ -19,7 +19,7 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          {["Dashboard", "Students", "Tutors"].map((item) => (
+          {["Dashboard", "Students", "Tutors", , "Kanban"].map((item) => (
             <li key={item}>
               <NavLink
                 to={`/${item.toLowerCase().replace(" ", "-")}`}
@@ -69,7 +69,7 @@ const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden bg-white shadow-md absolute w-full left-0 top-[60px]">
           <ul className="flex flex-col items-center space-y-4 py-4">
-            {["Dashboard", "Students", "Classes", "Calendar", "Reports", "Fees Due"].map((item) => (
+            {["Dashboard", "Students", "Tutors", "Kanban"].map((item) => (
               <li key={item}>
                 <NavLink
                   to={`/${item.toLowerCase().replace(" ", "-")}`}

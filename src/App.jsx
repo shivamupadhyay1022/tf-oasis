@@ -8,7 +8,7 @@ import StudentProfile from "./pages/StudentProfile";
 import './App.css'
 import Tutors from './pages/Tutors';
 import TutorProfile from './pages/TutorProfile';
-
+import Kanban from './pages/Kanban';
 function App() {
   const [count, setCount] = useState(0)
 
@@ -24,6 +24,7 @@ function App() {
           <Route path="/students/:id" element={<StudentProfile />} />
           <Route path="/tutors" element={<Tutors />} />
           <Route path="/tutors/:id" element={<TutorProfile />} />
+          <Route path="/kanban" element={<Kanban />} />
         </Route>
       </Routes>
     </div>
