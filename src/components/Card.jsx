@@ -61,7 +61,9 @@ const Card = ({ card, setCards }) => {
         {/* <TrashIcon className="w-5 h-5 text-red-500 cursor-pointer" /> */}
       </div>
       <p className="text-xs text-gray-600">{card.email}</p>
+      <p className="text-xs text-gray-800 mt-2">{card.phone}</p>
       <p className="text-xs text-gray-800 mt-2">{card.message}</p>
+      {console.log(card)}
 
       <div className="mt-3 flex justify-between items-center">
         <span className={`text-xs p-1 rounded text-gray-700 capitalize ${setColor(card.status)}`}>
