@@ -12,10 +12,11 @@ import TeachingDetails from "../components/TutorProfile/TeachingDetails";
 const TutorProfile = () => {
   const [tutor, setTutor] = useState()  
   const { id } = useParams();
-
+    const [key, setKey] = useState(0)
+  
   useLayoutEffect(() => {
     fetchTutors();
-  }, [id]);
+  }, [id,key]);
  
   const fetchTutors = async () => {
     const tutorRef = ref(db, `tutors/${id}`);
@@ -68,7 +69,7 @@ const TutorProfile = () => {
 
       {/* Render Content Based on Active Tab */}
       {activeTab === "Overview" && <Overview tutor={tutor}  />}
-      {activeTab === "Class Tracking" && <ClassTracking userData={tutor} />}
+      {activeTab === "Class Tracking" && <ClassTracking userData={tutor} setKeyProp={setKey} />}
       {activeTab === "Teaching Details" && <TeachingDetails tutorData = {tutor} />}
       {activeTab === "Fee Details" && <FeeDetails />}
       {activeTab === "Attendance" && <Attendance />}
