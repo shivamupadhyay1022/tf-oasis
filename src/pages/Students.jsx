@@ -55,7 +55,7 @@ function Students() {
   return (
 
     <div className="">
-    <div className="flex flex-col mx-4 md:mx-16 mt-10">
+    <div className="flex flex-col mx-4 md:mx-8 mt-10">
       <div className="flex flex-row justify-between items-center mb-10">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Students</h1>

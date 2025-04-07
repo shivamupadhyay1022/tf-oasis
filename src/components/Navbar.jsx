@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext, AuthProvider } from "./AuthContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { access } = useContext(AuthContext);
 
   // Toggle mobile menu
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -19,20 +21,24 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
-          {["Dashboard", "Students", "Tutors", , "Kanban"].map((item) => (
-            <li key={item}>
-              <NavLink
-                to={`/${item.toLowerCase().replace(" ", "-")}`}
-                className={({ isActive }) =>
-                  `hover:text-blue-500 ${
-                    isActive ? "text-blue-500 border-b-2 border-blue-500 pb-1" : "text-gray-700"
-                  }`
-                }
-              >
-                {item}
-              </NavLink>
-            </li>
-          ))}
+          {["Dashboard", "Students", "Tutors", "Kanban"]
+            .concat(access === "admin" ? ["Org"] : [])
+            .map((item) => (
+              <li key={item}>
+                <NavLink
+                  to={`/${item.toLowerCase().replace(" ", "-")}`}
+                  className={({ isActive }) =>
+                    `hover:text-blue-500 ${
+                      isActive
+                        ? "text-blue-500 border-b-2 border-blue-500 pb-1"
+                        : "text-gray-700"
+                    }`
+                  }
+                >
+                  {item}
+                </NavLink>
+              </li>
+            ))}
         </ul>
 
         {/* Mobile Menu Button (SVG Heroicons) */}
@@ -47,7 +53,11 @@ const Navbar = () => {
               stroke="currentColor"
               className="h-8 w-8"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           ) : (
             // Bars3Icon (Hamburger Menu)
@@ -59,7 +69,11 @@ const Navbar = () => {
               stroke="currentColor"
               className="h-8 w-8"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
             </svg>
           )}
         </button>
@@ -75,7 +89,9 @@ const Navbar = () => {
                   to={`/${item.toLowerCase().replace(" ", "-")}`}
                   className={({ isActive }) =>
                     `block py-2 text-lg ${
-                      isActive ? "text-blue-500 border-b-2 border-blue-500" : "text-gray-700"
+                      isActive
+                        ? "text-blue-500 border-b-2 border-blue-500"
+                        : "text-gray-700"
                     }`
                   }
                   onClick={() => setMenuOpen(false)} // Close menu on click

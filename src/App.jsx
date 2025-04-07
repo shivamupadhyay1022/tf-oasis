@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard"
-import Students from "./pages/Students";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./components/AuthContext";
+
 import Navbar from "./components/Navbar";
-import { ToastContainer } from "react-toastify";
+import Dashboard from "./pages/Dashboard";
+import Students from "./pages/Students";
 import StudentProfile from "./pages/StudentProfile";
-import './App.css'
-import Tutors from './pages/Tutors';
-import TutorProfile from './pages/TutorProfile';
-import Kanban from './pages/Kanban';
+import Tutors from "./pages/Tutors";
+import TutorProfile from "./pages/TutorProfile";
+import Kanban from "./pages/Kanban";
+import Org from "./pages/Org";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+
 function App() {
-  const [count, setCount] = useState(0)
+  const { currentUser, access } = useAuth();
 
   return (
     <div>
-      <Navbar />
-      <ToastContainer />
+      {currentUser && <Navbar />}
       <Routes>
-        <Route>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/students/:id" element={<StudentProfile />} />
-          <Route path="/tutors" element={<Tutors />} />
-          <Route path="/tutors/:id" element={<TutorProfile />} />
-          <Route path="/kanban" element={<Kanban />} />
-        </Route>
+        {!currentUser ? (
+          <>
+            <Route path="*" element={<Navigate to="/signin" replace />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot" element={<ForgotPassword />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/students" element={<Students />} />
+            <Route path="/students/:id" element={<StudentProfile />} />
+            <Route path="/tutors" element={<Tutors />} />
+            <Route path="/tutors/:id" element={<TutorProfile />} />
+            <Route path="/kanban" element={<Kanban />} />
+            {access === "admin" && <Route path="/org" element={<Org />} />}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
