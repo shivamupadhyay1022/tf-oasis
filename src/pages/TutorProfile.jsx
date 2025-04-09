@@ -41,7 +41,7 @@ const TutorProfile = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-semibold">{tutor?.name}</h1>
-          <p className="text-gray-500">Tutor Profile</p>
+          <p className="text-gray-500">Tutor Profile : {id}</p>
         </div>
       </div>
 

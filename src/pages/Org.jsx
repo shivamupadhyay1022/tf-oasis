@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ref, onValue, push, set, remove, update } from "firebase/database";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Org = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", access: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", access: "" });
   const [editId, setEditId] = useState(null);
   const [usersList, setUsersList] = useState({});
 
@@ -14,10 +15,9 @@ const Org = () => {
       const data = snapshot.val() || {};
       setUsersList(data);
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,19 +25,34 @@ const Org = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editId) {
-      await update(ref(db, `allowedUsers/${editId}`), formData);
-    } else {
-      const newUserRef = push(ref(db, "allowedUsers"));
-      await set(newUserRef, formData);
+    try {
+      if (editId) {
+        // Update existing user in Realtime Database
+        const updatedData = { ...formData };
+        delete updatedData.password; // Don't store password in database
+        await update(ref(db, `allowedUsers/${editId}`), updatedData);
+      } else {
+        // Create new user in Firebase Authentication
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const newUserRef = push(ref(db, "allowedUsers"));
+        await set(newUserRef, {
+          name: formData.name,
+          email: formData.email,
+          access: formData.access
+        });
+      }
+
+      setFormData({ name: "", email: "", password: "", access: "" });
+      setEditId(null);
+      setOpenDialog(false);
+    } catch (error) {
+      console.error("Error creating/updating user:", error);
+      alert(error.message);
     }
-    setFormData({ name: "", email: "", access: "" });
-    setEditId(null);
-    setOpenDialog(false);
   };
 
   const handleEdit = (id, user) => {
-    setFormData(user);
+    setFormData({ name: user.name, email: user.email, password: "", access: user.access });
     setEditId(id);
     setOpenDialog(true);
   };
@@ -53,13 +68,12 @@ const Org = () => {
         <h1 className="text-2xl font-bold text-gray-800">Organization Access Control</h1>
         <button
           onClick={() => {
-            setFormData({ name: "", email: "", access: "" });
+            setFormData({ name: "", email: "", password: "", access: "" });
             setEditId(null);
             setOpenDialog(true);
           }}
           className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          {/* Plus SVG */}
           <svg className="w-5 h-5 mr-2 fill-current" viewBox="0 0 24 24">
             <path d="M12 5v14M5 12h14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -79,13 +93,11 @@ const Org = () => {
               </span>
             </div>
             <div className="flex space-x-3">
-              {/* Edit Button */}
               <button onClick={() => handleEdit(id, user)} className="text-green-600 hover:text-green-800">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M4 21h4l10-10-4-4L4 17v4zM14.7 5.3l4 4 2-2-4-4-2 2z" fill="currentColor" />
                 </svg>
               </button>
-              {/* Delete Button */}
               <button onClick={() => handleDelete(id)} className="text-red-600 hover:text-red-800">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path d="M3 6h18M9 6v12m6-12v12M4 6l1 14a2 2 0 002 2h10a2 2 0 002-2l1-14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -124,8 +136,22 @@ const Org = () => {
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
                   required
+                  disabled={!!editId} // disable email field during edit
                 />
               </div>
+              {!editId && (
+                <div>
+                  <label className="block text-gray-700 text-sm mb-1">Password</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
+                    required
+                  />
+                </div>
+              )}
               <div>
                 <label className="block text-gray-700 text-sm mb-1">Access Level</label>
                 <input
@@ -137,11 +163,11 @@ const Org = () => {
                   required
                 />
               </div>
-              <div className="flex justify-end space-x-3 mt-4">
+              <div className="flex justify-end space-x-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setOpenDialog(false)}
-                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-100"
+                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                 >
                   Cancel
                 </button>
@@ -149,19 +175,10 @@ const Org = () => {
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
-                  {editId ? "Update" : "Add"}
+                  {editId ? "Update User" : "Add User"}
                 </button>
               </div>
             </form>
-            {/* Close Icon */}
-            <button
-              onClick={() => setOpenDialog(false)}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
           </div>
         </div>
       )}

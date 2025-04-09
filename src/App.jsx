@@ -12,6 +12,7 @@ import Org from "./pages/Org";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
+import Notifications from "./pages/Notifications";
 
 function App() {
   const { currentUser, access } = useAuth();
@@ -36,6 +37,7 @@ function App() {
             <Route path="/tutors" element={<Tutors />} />
             <Route path="/tutors/:id" element={<TutorProfile />} />
             <Route path="/kanban" element={<Kanban />} />
+            <Route path="/notify" element={<Notifications />} />
             {access === "admin" && <Route path="/org" element={<Org />} />}
             <Route path="*" element={<Navigate to="/" replace />} />
           </>

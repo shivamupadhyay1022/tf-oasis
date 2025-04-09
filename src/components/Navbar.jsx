@@ -22,7 +22,7 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-6">
           {["Dashboard", "Students", "Tutors", "Kanban"]
-            .concat(access === "admin" ? ["Org"] : [])
+            .concat(access === "admin" || access === "manager" ? ["Org", "Notify"] : [])
             .map((item) => (
               <li key={item}>
                 <NavLink
@@ -83,23 +83,25 @@ const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden bg-white shadow-md absolute w-full left-0 top-[60px]">
           <ul className="flex flex-col items-center space-y-4 py-4">
-            {["Dashboard", "Students", "Tutors", "Kanban"].map((item) => (
-              <li key={item}>
-                <NavLink
-                  to={`/${item.toLowerCase().replace(" ", "-")}`}
-                  className={({ isActive }) =>
-                    `block py-2 text-lg ${
-                      isActive
-                        ? "text-blue-500 border-b-2 border-blue-500"
-                        : "text-gray-700"
-                    }`
-                  }
-                  onClick={() => setMenuOpen(false)} // Close menu on click
-                >
-                  {item}
-                </NavLink>
-              </li>
-            ))}
+            {["Dashboard", "Students", "Tutors", "Kanban"]
+              .concat(access === "admin" || access === "manager" ? ["Org", "Notify"] : [])
+              .map((item) => (
+                <li key={item}>
+                  <NavLink
+                    to={`/${item.toLowerCase().replace(" ", "-")}`}
+                    className={({ isActive }) =>
+                      `block py-2 text-lg ${
+                        isActive
+                          ? "text-blue-500 border-b-2 border-blue-500"
+                          : "text-gray-700"
+                      }`
+                    }
+                    onClick={() => setMenuOpen(false)} // Close menu on click
+                  >
+                    {item}
+                  </NavLink>
+                </li>
+              ))}
           </ul>
         </div>
       )}
