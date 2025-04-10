@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-
+import { useAuth } from "../components/AuthContext";
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { currentUser } = useAuth();
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -17,6 +18,10 @@ const Signin = () => {
       setError(err.message);
     }
   };
+
+  // useEffect(()=>{
+  //   console.log(currentUser)
+  // },[])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
