@@ -10,6 +10,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [access, setAccess] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }) => {
           if (userData) {
             setCurrentUser(user);
             setAccess(userData.access);
+            setUserName(userData.name);
           } else {
             signOut(auth);
             setCurrentUser(null);
@@ -42,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, access }}>
+    <AuthContext.Provider value={{ currentUser, access,userName }}>
       {!loading && children}
     </AuthContext.Provider>
   );

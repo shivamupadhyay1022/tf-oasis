@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase";
 import { ref, update, remove } from "firebase/database";
 import SubtopicSearch from "../SubtopicSearch";
-
+import { useAuth } from "../AuthContext";
 const ClassTracking = ({ userData, setKeyProp }) => {
   const [classHistory, setClassHistory] = useState({});
   const [selectedUser, setSelectedUser] = useState(null);
@@ -12,7 +12,7 @@ const ClassTracking = ({ userData, setKeyProp }) => {
   const [newTopic, setNewTopic] = useState("");
   const [editedDetails, setEditedDetails] = useState({});
   const navigate = useNavigate();
-
+  const {userName} = useAuth()
   useEffect(() => {
     if (userData) {
       const groupedByUsers = {};
@@ -94,6 +94,7 @@ const ClassTracking = ({ userData, setKeyProp }) => {
 
     const updatedData = {
       ...editedDetails,
+      edited:userName,
       topicsCovered: topicsList,
     };
 
@@ -173,6 +174,8 @@ const ClassTracking = ({ userData, setKeyProp }) => {
                       className="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-md"
                     >
                       <p>Class Id: {session.id}</p>
+                      {session.edited && <p>Last Edited By: <span className="text-blue-600" >{session?.edited}</span></p>}
+
                       {editingClass === session.id ? (
                         <div>
                           {/* Edit Form */}
