@@ -15,13 +15,14 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Notifications from "./pages/Notifications";
 import Share from "./pages/Share";
 import SharePoster from "./pages/SharePosters";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const { currentUser, access } = useAuth();
 
   return (
     <div>
-      {currentUser && <Navbar />}
+      {currentUser && <div><Navbar /><ToastContainer/></div>}
       <Routes>
         {!currentUser ? (
           <>

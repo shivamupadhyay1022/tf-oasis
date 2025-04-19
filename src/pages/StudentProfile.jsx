@@ -108,7 +108,7 @@ const StudentProfile = () => {
           student={userData}
         />
       )}
-      {activeTab === "Class Tracking" && <ClassTracking userData={userData} setKeyProp={setKey} />}
+      {activeTab === "Class Tracking" && <ClassTracking userData={userData} id={id} setKeyProp={setKey} />}
       {activeTab === "Test Records" && <TestRecords />}
       {activeTab === "Fee Details" && <FeeDetails />}
       {activeTab === "Attendance" && <Attendance />}
