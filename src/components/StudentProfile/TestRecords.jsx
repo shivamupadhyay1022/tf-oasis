@@ -65,8 +65,16 @@ const TestRecords = () => {
   const handleAssign = (test) => {
     const assignedRef = ref(db, `users/${id}/tests/assigned`);
     const assigned_at = new Date().toISOString();
+    // console.log(      test.id,
+    //   test.Name,
+    //   countQuestions(test.Questions),
+    //   assigned_at,
+    //    userName)
     push(assignedRef, {
       test_id: test.id,
+      name:test.Name,
+      no_q:countQuestions(test.Questions),
+      duration:test.Duration,
       assigned_at,
       by: userName || 'Unknown'
     });
