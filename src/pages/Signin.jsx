@@ -2,26 +2,37 @@ import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../components/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { currentUser } = useAuth();
+  const {currentUser, isAuthorized } = useAuth();
+  const navigate = useNavigate();
 
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setError("");
-      alert("Signed in successfully!");
+      // No alert here, navigation will handle it
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // useEffect(()=>{
-  //   console.log(currentUser)
-  // },[])
+  useEffect(() => {
+    if (isAuthorized === "authorized") {
+      navigate("/dashboard");
+    } else if (isAuthorized === "unauthorized") {
+      // This case is handled by the main App router, but as a fallback:
+      if(currentUser)
+        navigate("/unauthorized");
+      else
+        navigate("/signin")
+    }
+  }, [isAuthorized, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

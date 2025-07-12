@@ -10,26 +10,38 @@ import TutorProfile from "./pages/TutorProfile";
 import Kanban from "./pages/Kanban";
 import Org from "./pages/Org";
 import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import Notifications from "./pages/Notifications";
 import Share from "./pages/Share";
 import SharePoster from "./pages/SharePosters";
+import Unauthorized from "./pages/Unauthorized"; // Import the new component
 import { ToastContainer } from "react-toastify";
 
 function App() {
-  const { currentUser, access } = useAuth();
+  const { isAuthorized, access } = useAuth();
+
+  if (isAuthorized === "pending") {
+    return <div>Loading...</div>; // Or a global spinner
+  }
 
   return (
     <div>
-      {currentUser && <div><Navbar /><ToastContainer/></div>}
+      {isAuthorized === "authorized" && <Navbar />}
+      <ToastContainer />
       <Routes>
-        {!currentUser ? (
+        {isAuthorized !== "authorized" ? (
           <>
-            <Route path="*" element={<Navigate to="/signin" replace />} />
             <Route path="/signin" element={<Signin />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/forgot" element={<ForgotPassword />} />
+            {/* If logged in but not authorized, show the Unauthorized page */}
+            {isAuthorized === "unauthorized" && (
+              <Route path="/unauthorized" element={<Unauthorized />} />
+            )}
+            {/* Redirect any other path to the correct page based on auth status */}
+            <Route
+              path="*"
+              element={<Navigate to={isAuthorized === "unauthorized" ? "/unauthorized" : "/signin"} replace />}
+            />
           </>
         ) : (
           <>

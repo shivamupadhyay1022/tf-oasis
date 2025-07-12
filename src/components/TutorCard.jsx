@@ -1,10 +1,52 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { remove,ref } from "firebase/database";
+import { toast } from "react-toastify";
+import { db } from "../firebase";
 
-function TutorCard({ details }) {
+function TutorCard({id, details,setKeyProp }) {
   const navigate = useNavigate();
+  const deleteTutor = async (id) => {
+      const confirm = window.confirm("Are you sure you want to delete this tutor?");
+      if (!confirm) return;
+    
+      try {
+        await remove(ref(db, `tutors/${id}`));
+        toast.success("Tutor deleted successfully");
+        setKeyProp(Math.random())
+    
+        // Optional: delete from Firebase Auth too (only if you’re an admin or use admin SDK)
+        // const user = await getUserById(id); // Your method to find the auth user
+        // await deleteUser(user);
+    
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to delete Tutor");
+      }
+    };
   return (
     <div className="bg-white border-2 border-gray-200 rounded-lg p-4 w-full max-w-md">
+      <div className="flex justify-end" >
+        <button
+          className="justify-self-end top-2 right-2 text-red-500 hover:text-red-700"
+          onClick={() => deleteTutor(id)}
+          title="Delete Student"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M6 2a1 1 0 00-1 1v1H3.5a.5.5 0 000 1h13a.5.5 0 000-1H15V3a1 1 0 00-1-1H6zm2 5a.5.5 0 011 0v7a.5.5 0 01-1 0V7zm3 0a.5.5 0 011 0v7a.5.5 0 01-1 0V7z" />
+            <path
+              fillRule="evenodd"
+              d="M4 6a1 1 0 011-1h10a1 1 0 011 1v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm2 1a.5.5 0 011 0v7a.5.5 0 01-1 0V7z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center space-x-3">
           <img

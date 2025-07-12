@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.5",
     "browser-image-compression": "^2.0.2",
     "country-state-city": "^3.2.1",
     "firebase": "^11.5.0",
+    "firebase-admin": "^13.4.0",
     "framer-motion": "^12.6.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
